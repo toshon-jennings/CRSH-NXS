@@ -205,7 +205,7 @@ export default function App() {
       <header className="nexus-header">
         <div className="nexus-header-container">
           <div className="nexus-logo-group">
-            <div className="nexus-logo-hex">CR</div>
+            <img src="./favicon.png" alt="Logo" style={{ width: '32px', height: '32px', borderRadius: '6px', flexShrink: 0 }} />
             <div className="nexus-title-block">
               <h1>CRSH Nexus</h1>
               <p>Central Registry of Localized Crash Risk Engines</p>
