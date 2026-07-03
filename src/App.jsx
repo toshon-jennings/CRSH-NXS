@@ -416,7 +416,7 @@ export default function App() {
         {/* Directory Header Filters */}
         <section className="nexus-directory-header">
           <div className="nexus-panel-title" style={{ marginBottom: 0 }}>
-            <h2>Sovereign Crash Engines</h2>
+            <h2>Federated City Engines</h2>
             <p>Directory of all custom city mapping layers built on the PHLCRSH-V2 platform.</p>
           </div>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
@@ -765,7 +765,7 @@ export default function App() {
 
       {/* Footer */}
       <footer className="nexus-footer">
-        <p>&copy; 2026 CRSH Federation. Sovereign street safety models. Hosted on GitHub Pages.</p>
+        <p>&copy; 2026 CRSH Federation. Federated street safety models. Hosted on GitHub Pages.</p>
       </footer>
     </div>
   );
