@@ -12,9 +12,20 @@ import {
   Moon,
   GitFork,
   X,
-  MapPin,
   ExternalLink,
 } from 'lucide-react';
+
+const getEngineUrl = (node) => {
+  if (node.site) return node.site;
+  if (!node.repo) return '';
+  const match = node.repo.match(/github\.com\/([^/]+)\/([^/]+)/i);
+  if (match) {
+    const owner = match[1];
+    const repo = match[2].replace(/\.git$/, '');
+    return `https://${owner}.github.io/${repo}/`;
+  }
+  return node.repo;
+};
 
 const initialNodes = [
   { 
@@ -23,6 +34,7 @@ const initialNodes = [
     city: 'Philadelphia', 
     admin: 'Toshon Jennings', 
     repo: 'https://github.com/toshon-jennings/PHLCRSH-V2', 
+    site: 'https://toshon-jennings.github.io/PHLCRSH-V2/',
     x: 500, 
     y: 200, 
     status: 'online', 
@@ -31,6 +43,7 @@ const initialNodes = [
     region: 'US-East' 
   }
 ];
+
 
 const initialFeed = [
   { id: 1, time: '2026-07', event: 'CRSH-NXS Deployed', desc: 'Central registry launched for tracking federated city crash risk engines.' },
@@ -69,6 +82,7 @@ export default function App() {
     name: '',
     admin: '',
     repo: '',
+    site: '',
     region: 'US-East',
     segments: '12000',
     incidents: '450',
@@ -134,12 +148,23 @@ export default function App() {
       return;
     }
 
+    let siteUrl = formData.site ? (formData.site.startsWith('http') ? formData.site : `https://${formData.site}`) : '';
+    if (!siteUrl && formData.repo) {
+      const match = formData.repo.match(/github\.com\/([^/]+)\/([^/]+)/i);
+      if (match) {
+        const owner = match[1];
+        const repo = match[2].replace(/\.git$/, '');
+        siteUrl = `https://${owner}.github.io/${repo}/`;
+      }
+    }
+
     const newNode = {
       id: formData.city.toLowerCase().replace(/\s+/g, '-'),
       city: formData.city,
       name: formData.name,
       admin: formData.admin || 'Anonymous',
       repo: formData.repo.startsWith('http') ? formData.repo : `https://${formData.repo}`,
+      site: siteUrl,
       region: formData.region,
       segments: parseInt(formData.segments) || 0,
       incidents: formData.status === 'online' ? (parseInt(formData.incidents) || 0) : null,
@@ -170,6 +195,7 @@ export default function App() {
       name: '',
       admin: '',
       repo: '',
+      site: '',
       region: 'US-East',
       segments: '12000',
       incidents: '450',
@@ -317,6 +343,12 @@ export default function App() {
                       className="map-node-hitbox"
                       onMouseEnter={() => setHighlightedNode(node.id)}
                       onMouseLeave={() => setHighlightedNode(null)}
+                      onClick={() => {
+                        const targetUrl = getEngineUrl(node);
+                        if (targetUrl) {
+                          window.open(targetUrl, '_blank', 'noopener,noreferrer');
+                        }
+                      }}
                     >
                       {/* Pulse Outer Rings */}
                       {isOnline && (
@@ -432,6 +464,13 @@ export default function App() {
                 className={`nexus-node-card ${highlightedNode === node.id ? 'highlighted' : ''}`}
                 onMouseEnter={() => setHighlightedNode(node.id)}
                 onMouseLeave={() => setHighlightedNode(null)}
+                onClick={() => {
+                  const targetUrl = getEngineUrl(node);
+                  if (targetUrl) {
+                    window.open(targetUrl, '_blank', 'noopener,noreferrer');
+                  }
+                }}
+                title={`Launch ${node.city} Crash Risk Engine`}
               >
                 <div className="nexus-card-top">
                   <div className="nexus-card-meta">
@@ -455,20 +494,32 @@ export default function App() {
                 </div>
 
                 <div className="nexus-card-bottom">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '8px' }}>
                     <span style={{ color: 'var(--text-tertiary)' }}>Maintainer:</span>
                     <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{node.admin}</span>
                   </div>
-                  <a
-                    href={node.repo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="nexus-card-link"
-                  >
-                    <GitFork size={12} />
-                    <span>View GitHub Source</span>
-                    <ArrowUpRight size={10} style={{ marginLeft: 'auto' }} />
-                  </a>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px', width: '100%' }}>
+                    <a
+                      href={getEngineUrl(node)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="nexus-card-action-btn primary"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <ExternalLink size={13} />
+                      <span>Launch Engine</span>
+                    </a>
+                    <a
+                      href={node.repo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="nexus-card-action-btn secondary"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <GitFork size={13} />
+                      <span>View GitHub Repository</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             ))
@@ -571,6 +622,18 @@ export default function App() {
                     required
                     placeholder="e.g. github.com/user/PHLCRSH-V2"
                     value={formData.repo}
+                    onChange={handleInputChange}
+                  />
+                </div>
+
+                <div className="nexus-form-group">
+                  <label htmlFor="form-site">Engine Deployment URL (Optional)</label>
+                  <input
+                    id="form-site"
+                    type="text"
+                    name="site"
+                    placeholder="e.g. user.github.io/PHLCRSH-V2 (Auto-derived if left blank)"
+                    value={formData.site}
                     onChange={handleInputChange}
                   />
                 </div>

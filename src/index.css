@@ -15,6 +15,7 @@
   --accent: #5a9cf5;
   --accent-hover: #7ab4ff;
   --accent-glow: rgba(90, 156, 245, 0.15);
+  --accent-muted: rgba(90, 156, 245, 0.08);
   
   --success: #4ade80;
   --success-glow: rgba(74, 222, 128, 0.15);
@@ -44,6 +45,7 @@
   --accent: #5a9cf5;
   --accent-hover: #7ab4ff;
   --accent-glow: rgba(90, 156, 245, 0.25);
+  --accent-muted: rgba(90, 156, 245, 0.15);
   
   --success: #4ade80;
   --success-glow: rgba(74, 222, 128, 0.25);
@@ -586,6 +588,43 @@ h1, h2, h3, h4, .nexus-logo-hex {
 
 .nexus-card-link:hover {
   color: var(--accent);
+}
+
+.nexus-card-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  flex: 1;
+}
+
+.nexus-card-action-btn.primary {
+  background-color: var(--accent);
+  color: #ffffff;
+  box-shadow: 0 2px 8px var(--accent-glow);
+}
+
+.nexus-card-action-btn.primary:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.nexus-card-action-btn.secondary {
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.nexus-card-action-btn.secondary:hover {
+  background-color: var(--border);
+  color: var(--text-primary);
+  border-color: var(--text-tertiary);
 }
 
 /* Documentation Stepper */
