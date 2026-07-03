@@ -32,15 +32,15 @@
 
 :root.dark {
   /* Dark Theme matching PHLCRSH-V2 exactly */
-  --bg-primary: #0f0f1e;
-  --bg-secondary: rgba(20, 20, 40, 0.88);
-  --bg-tertiary: #1a1a2e;
+  --bg-primary: #06060c;
+  --bg-secondary: rgba(18, 18, 28, 0.88);
+  --bg-tertiary: #0f0f1e;
   
   --text-primary: #ffffff;
   --text-secondary: #e0e0e0;
   --text-tertiary: #888888;
   
-  --border: rgba(255, 255, 255, 0.07);
+  --border: rgba(255, 255, 255, 0.08);
   
   --accent: #5a9cf5;
   --accent-hover: #7ab4ff;
