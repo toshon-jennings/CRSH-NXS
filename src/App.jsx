@@ -500,8 +500,8 @@ export default function App() {
             </div>
             <div className="nexus-step-item">
               <div className="nexus-step-num">3</div>
-              <h4>Register on Nexus</h4>
-              <p>Register your engine details, custom coordinate center, and segments mapped on the CRSH Nexus registry.</p>
+              <h4>Register on CRSH-NXS</h4>
+              <p>Register your engine details, custom coordinate center, and segments mapped on the CRSH-NXS registry.</p>
               <button 
                 type="button" 
                 onClick={() => setIsModalOpen(true)}
