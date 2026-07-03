@@ -33,7 +33,7 @@ const initialNodes = [
 ];
 
 const initialFeed = [
-  { id: 1, time: '2026-07', event: 'CRSH Nexus Deployed', desc: 'Central registry launched for tracking federated city crash risk engines.' },
+  { id: 1, time: '2026-07', event: 'CRSH-NXS Deployed', desc: 'Central registry launched for tracking federated city crash risk engines.' },
   { id: 2, time: '2026-06', event: 'PHLCRSH Engine Live', desc: 'Philadelphia mapping dashboard deployed with DuckDB queries and canopy layers.' }
 ];
 
@@ -207,7 +207,7 @@ export default function App() {
           <div className="nexus-logo-group">
             <img src="./favicon.png" alt="Logo" style={{ width: '32px', height: '32px', borderRadius: '6px', flexShrink: 0 }} />
             <div className="nexus-title-block">
-              <h1>CRSH Nexus</h1>
+              <h1>CRSH-NXS</h1>
               <p>Central Registry of Localized Crash Risk Engines</p>
             </div>
           </div>
