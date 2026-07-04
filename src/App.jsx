@@ -37,13 +37,28 @@ const initialNodes = [
     incidents: 1250, 
     segments: 13500, 
     region: 'US-East' 
+  },
+  { 
+    id: 'trenton', 
+    name: 'TTNCRSH Engine', 
+    city: 'Trenton', 
+    admin: 'Toshon Jennings', 
+    repo: 'https://github.com/toshon-jennings/TTNCRSH', 
+    site: 'https://toshon-jennings.github.io/TTNCRSH/',
+    x: 550, 
+    y: 250, 
+    status: 'online', 
+    incidents: 993, 
+    segments: 4256, 
+    region: 'US-East' 
   }
 ];
 
 
 const initialFeed = [
   { id: 1, time: '2026-07', event: 'CRSH-NXS Deployed', desc: 'Central registry launched for tracking federated city crash risk engines.' },
-  { id: 2, time: '2026-06', event: 'PHLCRSH Engine Live', desc: 'Philadelphia mapping dashboard deployed with DuckDB queries and canopy layers.' }
+  { id: 2, time: '2026-06', event: 'PHLCRSH Engine Live', desc: 'Philadelphia mapping dashboard deployed with DuckDB queries and canopy layers.' },
+  { id: 3, time: '2026-07', event: 'TTNCRSH Engine Registered', desc: 'Trenton crash risk engine added to registry with 993 official geocoded NJDOT records.' }
 ];
 
 export default function App() {
