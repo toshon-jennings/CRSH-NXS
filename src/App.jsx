@@ -71,11 +71,25 @@ export default function App() {
     return 'dark';
   });
 
-  // Load registered nodes from localStorage if they exist, fallback to Philadelphia
+  // Load registered nodes from localStorage if they exist, merged with the default initialNodes
   const [nodes, setNodes] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('crsh-nexus-nodes');
-      return saved ? JSON.parse(saved) : initialNodes;
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          const merged = [...initialNodes];
+          parsed.forEach(parsedNode => {
+            if (!merged.some(n => n.id === parsedNode.id)) {
+              merged.push(parsedNode);
+            }
+          });
+          return merged;
+        } catch (e) {
+          console.error("Error parsing saved nodes from localStorage", e);
+          return initialNodes;
+        }
+      }
     }
     return initialNodes;
   });
