@@ -1,12 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
-  Globe,
   Plus,
   Search,
   CheckCircle,
-  Cpu,
-  Zap,
-  Activity,
   ArrowUpRight,
   Sun,
   Moon,
@@ -231,10 +227,10 @@ export default function App() {
       <header className="nexus-header">
         <div className="nexus-header-container">
           <div className="nexus-logo-group">
-            <img src="./favicon.png" alt="Logo" style={{ width: '32px', height: '32px', borderRadius: '6px', flexShrink: 0 }} />
+            <img src="./favicon.png" alt="Logo" className="nexus-logo-img" />
             <div className="nexus-title-block">
               <h1>CRSH-NXS</h1>
-              <p>Central Registry of Localized Crash Risk Engines</p>
+              <p>Central registry of localized crash risk engines</p>
             </div>
           </div>
           <div className="nexus-header-actions">
@@ -260,43 +256,27 @@ export default function App() {
 
       {/* Main Container */}
       <main className="nexus-main">
-        {/* Stats Matrix Grid */}
-        <section className="nexus-stats-matrix">
-          <div className="nexus-stat-card">
-            <div className="nexus-stat-icon-wrapper">
-              <Globe size={20} />
-            </div>
-            <div className="nexus-stat-info">
-              <h3>{stats.total}</h3>
-              <p>Registered City Engines</p>
-            </div>
+        {/* Registry Stats Strip */}
+        <section className="nexus-stats-strip" aria-label="Registry statistics">
+          <div className="nexus-stat-cell">
+            <span className="nexus-stat-label"><span className="nexus-tick" />City engines</span>
+            <span className="nexus-stat-value">{stats.total}</span>
+            <span className="nexus-stat-sub">registered in the federation</span>
           </div>
-          <div className="nexus-stat-card">
-            <div className="nexus-stat-icon-wrapper" style={{ color: '#4ade80' }}>
-              <Zap size={20} />
-            </div>
-            <div className="nexus-stat-info">
-              <h3>{stats.online} <span style={{ fontSize: '12px', color: 'var(--text-secondary)', fontWeight: 400 }}>active</span></h3>
-              <p>Connected Instances</p>
-            </div>
+          <div className="nexus-stat-cell">
+            <span className="nexus-stat-label"><span className="nexus-tick green" />Online</span>
+            <span className="nexus-stat-value">{stats.online}</span>
+            <span className="nexus-stat-sub">connected instances</span>
           </div>
-          <div className="nexus-stat-card">
-            <div className="nexus-stat-icon-wrapper" style={{ color: '#5a9cf5' }}>
-              <Cpu size={20} />
-            </div>
-            <div className="nexus-stat-info">
-              <h3>{stats.segments.toLocaleString()}</h3>
-              <p>Tracked Road Segments</p>
-            </div>
+          <div className="nexus-stat-cell">
+            <span className="nexus-stat-label"><span className="nexus-tick neutral" />Road segments</span>
+            <span className="nexus-stat-value">{stats.segments.toLocaleString()}</span>
+            <span className="nexus-stat-sub">tracked across all cities</span>
           </div>
-          <div className="nexus-stat-card">
-            <div className="nexus-stat-icon-wrapper" style={{ color: '#f87171' }}>
-              <Activity size={20} />
-            </div>
-            <div className="nexus-stat-info">
-              <h3>{stats.incidents.toLocaleString()}</h3>
-              <p>KSI Accidents Mapped</p>
-            </div>
+          <div className="nexus-stat-cell">
+            <span className="nexus-stat-label"><span className="nexus-tick red" />KSI incidents</span>
+            <span className="nexus-stat-value">{stats.incidents.toLocaleString()}</span>
+            <span className="nexus-stat-sub">killed or seriously injured, mapped</span>
           </div>
         </section>
 
@@ -305,18 +285,23 @@ export default function App() {
           {/* SVG Connection Topology Map */}
           <div className="nexus-panel">
             <div className="nexus-panel-title">
-              <h2>Federation Topology</h2>
-              <p>Spatial mapping registry showing active city crash risk nodes. Hover dots to identify nodes.</p>
+              <span className="nexus-eyebrow">Network</span>
+              <h2>Federation Map</h2>
+              <p>Every dot is a city crash risk node. Hover to identify a node, click to open its engine.</p>
             </div>
             <div className="nexus-map-container">
               <svg viewBox="0 0 1000 500" className="nexus-map-svg">
                 {/* Background Grid Pattern */}
                 <defs>
                   <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="var(--border)" strokeWidth="0.5" opacity="0.3" />
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="var(--map-grid)" strokeWidth="0.5" opacity="0.55" />
                   </pattern>
                 </defs>
                 <rect width="1000" height="500" fill="url(#grid)" />
+
+                {/* Survey graticule references */}
+                <text x="12" y="20" className="map-graticule">GRID 000.000</text>
+                <text x="988" y="490" textAnchor="end" className="map-graticule">1000 &#183; 500</text>
 
                 {/* Draw connection pathways (if more than 1 engine exists) */}
                 {connectionPaths.map((path) => (
@@ -326,9 +311,7 @@ export default function App() {
                     y1={path.y1}
                     x2={path.x2}
                     y2={path.y2}
-                    stroke="var(--accent)"
-                    strokeWidth="1.5"
-                    opacity="0.35"
+                    strokeWidth="2"
                     className="network-line"
                   />
                 ))}
@@ -357,19 +340,19 @@ export default function App() {
                           cy={node.y}
                           r={isHovered ? 18 : 12}
                           fill="none"
-                          stroke={isHovered ? 'var(--accent)' : 'var(--accent)'}
+                          stroke="var(--yellow)"
                           strokeWidth="1"
                           className="glow-dot-outer"
                         />
                       )}
-                      
+
                       {/* Inner Dot */}
                       <circle
                         cx={node.x}
                         cy={node.y}
                         r={isHovered ? 6 : 4.5}
-                        fill={isOnline ? 'var(--success)' : 'var(--error)'}
-                        stroke="var(--bg-secondary)"
+                        className={`map-node-dot ${isOnline ? 'online' : 'offline'}`}
+                        stroke="var(--map-bg)"
                         strokeWidth="1"
                       />
 
@@ -380,9 +363,9 @@ export default function App() {
                           y="-9"
                           width={node.city.length * 7 + 12}
                           height="16"
-                          className="map-node-label-bg"
+                          className={`map-node-label-bg${isHovered ? ' hovered' : ''}`}
                         />
-                        <text className="map-node-label" y="2">
+                        <text className={`map-node-label${isHovered ? ' hovered' : ''}`} y="3">
                           {node.city}
                         </text>
                       </g>
@@ -396,8 +379,9 @@ export default function App() {
           {/* Activity Log Feed */}
           <div className="nexus-panel">
             <div className="nexus-panel-title">
-              <h2>Recent Project Milestones</h2>
-              <p>Log stream of platform deploys, new feature merges, and directory registrations.</p>
+              <span className="nexus-eyebrow">Road log</span>
+              <h2>Recent Milestones</h2>
+              <p>Platform deploys, feature merges, and new registrations.</p>
             </div>
             <div className="nexus-feed-list">
               {feed.map((item) => (
@@ -416,10 +400,11 @@ export default function App() {
         {/* Directory Header Filters */}
         <section className="nexus-directory-header">
           <div className="nexus-panel-title" style={{ marginBottom: 0 }}>
+            <span className="nexus-eyebrow">Directory</span>
             <h2>Federated City Engines</h2>
-            <p>Directory of all custom city mapping layers built on the PHLCRSH-V2 platform.</p>
+            <p>Every city mapping layer built on the PHLCRSH-V2 platform.</p>
           </div>
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+          <div className="nexus-directory-controls">
             <div className="nexus-search-input">
               <Search size={14} className="text-slate-400" />
               <input
@@ -474,31 +459,33 @@ export default function App() {
               >
                 <div className="nexus-card-top">
                   <div className="nexus-card-meta">
-                    <h3>{node.city} ({node.region})</h3>
-                    <span>{node.name}</span>
+                    <span className="nexus-card-region">{node.region}</span>
+                    <h3>{node.city}</h3>
+                    <span className="nexus-card-engine">{node.name}</span>
                   </div>
                   <span className={`nexus-badge-status ${node.status}`}>
+                    <span className="nexus-status-dot" />
                     {node.status}
                   </span>
                 </div>
 
                 <div className="nexus-card-stats">
                   <div className="nexus-card-stat-item">
-                    <span>Mapped Road Segments</span>
+                    <span>Road segments</span>
                     <span>{node.segments.toLocaleString()}</span>
                   </div>
                   <div className="nexus-card-stat-item">
-                    <span>KSI Incidents</span>
+                    <span>KSI incidents</span>
                     <span>{node.incidents ? node.incidents.toLocaleString() : '—'}</span>
                   </div>
                 </div>
 
                 <div className="nexus-card-bottom">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '8px' }}>
-                    <span style={{ color: 'var(--text-tertiary)' }}>Maintainer:</span>
-                    <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{node.admin}</span>
+                  <div className="nexus-card-maintainer">
+                    <span>Maintainer</span>
+                    <span>{node.admin}</span>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px', width: '100%' }}>
+                  <div className="nexus-card-actions">
                     <a
                       href={getEngineUrl(node)}
                       target="_blank"
@@ -507,7 +494,7 @@ export default function App() {
                       onClick={(e) => e.stopPropagation()}
                     >
                       <ExternalLink size={13} />
-                      <span>Launch Engine</span>
+                      <span>Launch engine</span>
                     </a>
                     <a
                       href={node.repo}
@@ -517,15 +504,15 @@ export default function App() {
                       onClick={(e) => e.stopPropagation()}
                     >
                       <GitFork size={13} />
-                      <span>View GitHub Repository</span>
+                      <span>View repository</span>
                     </a>
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px', color: 'var(--text-tertiary)' }}>
-              No city engines found matching the search criteria.
+            <div className="nexus-empty">
+              No city engines match this search. Clear the filters or register a new engine.
             </div>
           )}
         </section>
@@ -533,33 +520,33 @@ export default function App() {
         {/* Stepper Guide (How to Fork) */}
         <section className="nexus-steps-card">
           <div className="nexus-panel-title">
+            <span className="nexus-eyebrow">Deployment route</span>
             <h2>Building a City Engine</h2>
-            <p>Three quick steps to spin up a custom crash risk map and register it in the nexus.</p>
+            <p>Three steps from fork to federation: spin up a custom crash risk map and register it in the nexus.</p>
           </div>
           <div className="nexus-steps-grid">
             <div className="nexus-step-item">
-              <div className="nexus-step-num">1</div>
+              <div className="nexus-step-num"><span>1</span></div>
               <h4>Fork the Repository</h4>
               <p>Fork the main PHLCRSH-V2 mapping template to your own GitHub workspace.</p>
               <code>git clone https://github.com/toshon-jennings/PHLCRSH-V2.git</code>
             </div>
             <div className="nexus-step-item">
-              <div className="nexus-step-num">2</div>
+              <div className="nexus-step-num"><span>2</span></div>
               <h4>Customize City Data & Map</h4>
               <p>Replace Philadelphia geographic layers, crash GeoParquet files, canopy boundaries, and custom filter metrics with your local city data.</p>
               <code>data_prep/</code>
             </div>
             <div className="nexus-step-item">
-              <div className="nexus-step-num">3</div>
+              <div className="nexus-step-num"><span>3</span></div>
               <h4>Register on CRSH-NXS</h4>
               <p>Register your engine details, custom coordinate center, and segments mapped on the CRSH-NXS registry.</p>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={() => setIsModalOpen(true)}
-                className="nexus-card-link" 
-                style={{ background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', fontWeight: 600 }}
+                className="nexus-step-link"
               >
-                <span>Register City Engine</span>
+                <span>Register city engine</span>
                 <ArrowUpRight size={12} />
               </button>
             </div>
@@ -580,7 +567,7 @@ export default function App() {
 
             {!formSubmitted ? (
               <form onSubmit={handleSubmit} className="nexus-form">
-                <div style={{ fontSize: '11px', color: 'var(--text-tertiary)', lineHeight: '1.4', marginBottom: '8px' }}>
+                <div className="nexus-form-note">
                   <p>
                     <strong>Note:</strong> Submitting this form registers the engine in your local browser session cache (saved to localStorage). To list your city permanently in the global directory, submit a Pull Request adding your configuration details to <code>src/App.jsx</code>.
                   </p>
@@ -732,29 +719,27 @@ export default function App() {
                   <CheckCircle size={32} />
                 </div>
                 <div>
-                  <h4>Registered Locally!</h4>
-                  <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '8px', lineHeight: '1.4' }}>
+                  <h4>Registered Locally</h4>
+                  <p className="nexus-success-note">
                     {formData.name} ({formData.city}) is now active in your browser. To finalize this registration in the global registry, click below to submit a Pull Request to the repository.
                   </p>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', marginTop: '12px' }}>
+                <div className="nexus-success-actions">
                   <a
                     href="https://github.com/toshon-jennings/CRSH-NXS"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="nexus-btn-register"
-                    style={{ textDecoration: 'none', display: 'flex', justifyContent: 'center' }}
+                    className="nexus-btn-register nexus-btn-block"
                   >
                     <GitFork size={14} />
-                    Submit Pull Request
+                    Submit pull request
                   </a>
                   <button
                     type="button"
                     onClick={closeModal}
-                    className="nexus-btn-register"
-                    style={{ background: 'none', border: '1px solid var(--border)', color: 'var(--text-secondary)', boxShadow: 'none', display: 'flex', justifyContent: 'center' }}
+                    className="nexus-btn-ghost"
                   >
-                    Return to Dashboard
+                    Return to dashboard
                   </button>
                 </div>
               </div>
@@ -765,7 +750,7 @@ export default function App() {
 
       {/* Footer */}
       <footer className="nexus-footer">
-        <p>&copy; 2026 CRSH Federation. Federated street safety models. Hosted on GitHub Pages.</p>
+        <p>&copy; 2026 CRSH Federation &middot; Federated street safety models &middot; Hosted on GitHub Pages</p>
       </footer>
     </div>
   );

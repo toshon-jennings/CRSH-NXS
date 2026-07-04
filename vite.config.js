@@ -6,7 +6,7 @@ export default defineConfig({
   base: '/CRSH-NXS/',
   plugins: [react()],
   server: {
-    port: 5180,
+    port: Number(process.env.PORT) || 5180,
     strictPort: false
   }
 })
